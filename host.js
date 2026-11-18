@@ -111,7 +111,7 @@ function renderLobby(state) {
   root.className = "wrap hostwrap";
   root.innerHTML = `
     <div class="hosttop">
-      <div class="brand small">CARD<span>CODE</span></div>
+      <div class="brand small">CARD<span>CODE</span> ${Room.live ? "" : `<span class="pilldemo">Demo mode</span>`}</div>
       <div class="dim">Students open <b>${esc(shortUrl())}</b></div>
     </div>
     <div class="bigcode">${code}</div>
@@ -155,7 +155,8 @@ function renderPlayHost(state) {
     root.className = "wrap hostwrap";
     root.innerHTML = `
       <div class="hosttop">
-        <div class="roundpill">Round ${round + 1} <span>· ${puzzle.clues.length} clues</span></div>
+        <div class="roundpill">Round ${round + 1} <span>· ${puzzle.clues.length} clues</span>
+          ${Room.live ? "" : `<span class="pilldemo">Demo mode</span>`}</div>
         <div class="timer" id="clock">0:00</div>
       </div>
       <div class="clues big">${puzzle.clues.map((c, i) =>
