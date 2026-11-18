@@ -95,7 +95,13 @@ async function join() {
   let state = null;
   try { state = await Room.enter(code); } catch (e) { state = null; }
   if (!state) {
-    return renderLanding(`No game called ${code} yet. Check the code on the board.`);
+    // Say which failure this is. Thirty Chromebooks all reading "no game with that
+    // code" while the room is plainly running on the projector is a bad five minutes.
+    return renderLanding(Room.live
+      ? `No game called ${code} yet. Check the code on the board.`
+      : `No game called ${code} in this browser. This copy has no server set up, so it
+         can only play tabs of one computer — the page needs a Firebase URL in
+         config.js before a class can join.`);
   }
 
   // Only a code that really is a game is remembered for next time, so a typo
