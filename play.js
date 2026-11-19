@@ -125,6 +125,7 @@ async function join() {
 
 function render(state) {
   if (!state) return renderLanding();
+  if (staleRoom(state)) return renderStale(state);
   const round = state.round || 0;
   const rec = recordOf(state, round, pid);
 
@@ -132,6 +133,22 @@ function render(state) {
   if (state.phase === "play") return renderPlay(state, round, rec);
   if (state.phase === "reveal") return renderReveal(state, round, rec);
   return renderDone(state);
+}
+
+// A tab opened before a rebuild holds one version of the clues while the room
+// holds another. Reloading once fixes it when the server is current; if the room
+// itself is the old one, no reload can, so say that instead of playing on.
+function renderStale(state) {
+  const k = "cc:stale:" + (state.build || "");
+  if (!tab.get(k)) {
+    tab.set(k, "1");
+    location.reload();
+    return;
+  }
+  stopClock();
+  lastView = "stale";
+  root.className = "wrap center";
+  root.innerHTML = `<div class="warnbox">${esc(STALE_TEXT)}</div>`;
 }
 
 function renderLobby(state) {
@@ -342,6 +359,10 @@ async function renderReveal(state, round, rec) {
   let answer = null;
   try {
     const data = await loadAnswers();
+    if (answersOutOfDate()) {
+      root.innerHTML = `<div class="warnbox">${esc(STALE_TEXT)}</div>`;
+      return;
+    }
     answer = data.sets[state.set].rounds[round];
   } catch (e) {
     root.innerHTML = `<div class="warnbox">Couldn't load the answer. Reload the page.</div>`;

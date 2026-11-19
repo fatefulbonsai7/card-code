@@ -114,7 +114,10 @@ let ANSWERS = null;
 
 async function loadSets() {
   if (SETS) return SETS;
-  const r = await fetch("data/sets.json", { cache: "force-cache" });
+  // "no-cache" means revalidate: GitHub Pages answers with a cheap 304 unless
+  // the puzzle really changed. "force-cache" would pin a class to the build it
+  // first saw, which is how a screen ends up showing yesterday's clues.
+  const r = await fetch("data/sets.json", { cache: "no-cache" });
   if (!r.ok) throw new Error("puzzle file missing");
   SETS = await r.json();
   return SETS;
@@ -124,11 +127,28 @@ async function loadSets() {
 // in the network tab) while anyone is still solving.
 async function loadAnswers() {
   if (ANSWERS) return ANSWERS;
-  const r = await fetch("data/answers.json", { cache: "force-cache" });
+  const r = await fetch("data/answers.json", { cache: "no-cache" });
   if (!r.ok) throw new Error("answer file missing");
   ANSWERS = await r.json();
   return ANSWERS;
 }
+
+// Both data files carry the same build hash, and every room remembers the build
+// it was made with. Without these two checks a tab can hold one build's clues
+// and fetch another build's answer — two right answers for one puzzle, with no
+// warning. A mismatch is never resolved by guessing: the page says so.
+function answersOutOfDate() {
+  return !!(SETS && ANSWERS && SETS.build && ANSWERS.build
+    && SETS.build !== ANSWERS.build);
+}
+
+function staleRoom(state) {
+  return !!(state && state.build && SETS && SETS.build
+    && state.build !== SETS.build);
+}
+
+const STALE_TEXT = "This game was started with a different version of the page. "
+  + "Reload this tab (Ctrl+Shift+R). If it says this again, ask your teacher to start a new game.";
 
 function setFor(code, sets) {
   const n = sets.count || sets.sets.length;

@@ -15,6 +15,11 @@ const store = {
   drop(k) { try { localStorage.removeItem(k); } catch (e) {} },
 };
 
+const tab = {
+  get(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} },
+};
+
 function joinUrl() {
   const base = location.origin + location.pathname.replace(/host\.html$/, "");
   return base.replace(/\/$/, "") + "/";
@@ -63,6 +68,7 @@ async function makeRoom() {
     const candidate = String(1000 + Math.floor(Math.random() * 9000));
     const opening = {
       v: 1,
+      build: sets.build,
       set: setFor(candidate, sets),
       phase: "lobby",
       round: 0,
@@ -90,10 +96,23 @@ function render(state) {
     if (lastView !== "setup") renderSetup();
     return;
   }
+  if (staleRoom(state)) return renderStale(state);
   if (state.phase === "lobby") return renderLobby(state);
   if (state.phase === "play") return renderPlayHost(state);
   if (state.phase === "reveal") return renderRevealHost(state);
   return renderDoneHost(state);
+}
+
+function renderStale(state) {
+  const k = "cc:stale:" + (state.build || "");
+  if (!tab.get(k)) {
+    tab.set(k, "1");
+    location.reload();
+    return;
+  }
+  lastView = "stale";
+  root.className = "wrap center";
+  root.innerHTML = `<div class="warnbox">${esc(STALE_TEXT)}</div>`;
 }
 
 function renderLobby(state) {
@@ -208,6 +227,10 @@ async function renderRevealHost(state) {
   root.innerHTML = `<div class="center"><div class="dim">Loading the answer…</div></div>`;
   try {
     const data = await loadAnswers();
+    if (answersOutOfDate()) {
+      root.innerHTML = `<div class="warnbox">${esc(STALE_TEXT)}</div>`;
+      return;
+    }
     answers = data;
   } catch (e) {
     root.innerHTML = `<div class="warnbox">Answer file missing.</div>`;
