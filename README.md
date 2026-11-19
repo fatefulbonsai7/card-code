@@ -31,7 +31,7 @@ Clues look like this:
 
 - *The four numbers add up to 68.*
 - *Exactly one of the four cards is a circle.*
-- *The second-lowest number is 18.*
+- *The second-highest number is even.*
 - *No two of the four numbers differ by 1.*
 
 ---
@@ -85,9 +85,10 @@ Each puzzle is generated and **proved before it is shipped**: all the clues must
 of the answer, they must leave exactly one of the 14,950 possible four-card codes, and
 every clue must be load-bearing. A set that fails any of that is never written to disk.
 
-The four cards are a set, not a sequence, so clues say *the second-lowest number* rather
-than *the second card*. And because A=1 and Z=26, alphabetical order is numeric order,
-which is why rank clues can be checked by eye.
+The four cards are a set, not a sequence, so clues talk about *the second-lowest
+number* rather than *the second card you tapped*. No clue ever tells you a number
+outright: position is given as a property (prime, odd, a multiple of 3) or through
+sums and counts, so the four numbers have to be worked out.
 
 The 300 sets are precomputed. The game code picks one (`code % 300`), so two codes can
 share a set of puzzles; nobody has ever noticed, and it keeps the data file small.
