@@ -40,7 +40,7 @@ function renderSetup(message) {
   root.innerHTML = `
     <div class="brand">CARD<span>CODE</span></div>
     <p class="lede">Three rounds of four cards out of twenty-six.<br>
-      4 clues, then 5, then 6. Every clue is needed — nothing is padding.</p>
+      Five clues a round. Every clue is needed — nothing is padding.</p>
     ${message ? `<div class="warnbox">${esc(message)}</div>` : ""}
     <div class="joincard">
       <button class="primary big" id="make">Host a game</button>
@@ -142,13 +142,8 @@ function renderLobby(state) {
       </div>
       <div class="lobbybox">
         <div class="label">How it plays</div>
-        <div class="three">
-          <div><b>1</b><span>4 clues</span></div>
-          <div><b>2</b><span>5 clues</span></div>
-          <div><b>3</b><span>6 clues</span></div>
-        </div>
-        <div class="dim small">First to crack it gets the most points. Every wrong
-          answer costs 20, a hint costs 20.</div>
+        <div class="dim small">Three rounds, five clues each. First to crack it gets the
+          most points. Every wrong answer costs 20, a hint costs 20.</div>
         <button class="primary big" id="start" ${players.length ? "" : "disabled"}>Start round 1</button>
       </div>
     </div>`;

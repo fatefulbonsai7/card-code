@@ -165,11 +165,7 @@ function renderLobby(state) {
     <div class="brand small">CARD<span>CODE</span></div>
     <div class="bigword">You're in.</div>
     <div class="dim" id="count">${count} player${count === 1 ? "" : "s"} in</div>
-    <div class="three">
-      <div><b>1</b><span>4 clues</span></div>
-      <div><b>2</b><span>5 clues</span></div>
-      <div><b>3</b><span>6 clues</span></div>
-    </div>
+    <div class="dim">Three rounds · five clues each</div>
     <div class="hint">${esc(myName || "Your name")}, wait for your teacher to start.</div>`;
 }
 

@@ -15,7 +15,7 @@ No app, no accounts, no QR codes, no laptop running a server.
 There are 26 cards: A–Z, numbered 1–26, each with a shape and a colour. The game hides a
 code — four of those cards. You are given clues about it and have to name the four.
 
-> Round 1 has 4 clues. Round 2 has 5. Round 3 has 6.
+> Three rounds. Five clues a round. No clue ever states a number outright.
 
 | | |
 |---|---|

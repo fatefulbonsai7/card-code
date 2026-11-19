@@ -25,7 +25,7 @@ const CARD = Object.fromEntries(DECK.map(c => [c.letter, c]));
 const BONUS = [60, 45, 35, 25, 20, 15, 10, 10, 10, 10];
 const WRONG_COST = 20;
 const HINT_COST = 20;
-const ROUND_CLUES = [4, 5, 6];
+const ROUND_CLUES = [5, 5, 5];
 
 function esc(s) {
   return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
