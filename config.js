@@ -13,4 +13,4 @@
 // Nothing else needs changing. The URL is public by design: it is the room the
 // class meets in, not a secret.
 
-window.CARD_CODE_FIREBASE = "";
+window.CARD_CODE_FIREBASE = "https://cardcode-bdcc5-default-rtdb.firebaseio.com";
